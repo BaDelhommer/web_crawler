@@ -1,5 +1,23 @@
-import { normalizeURL } from "./crawl.js";
+import { normalizeURL, crawlPage } from "./crawl.js";
+import process from "node:process";
 
-normalizeURL('http://blog.boot.dev/path/')
+function main() {
+    if (process.argv.length > 3) {
+        console.log("Too many arguments")
+        return
+    }
 
-console.log("hello world")
+    if (process.argv.length < 3) {
+        console.log("Too few arguments")
+        return
+    }
+    const baseURL = process.argv[2]
+
+    console.log(`starting crawl of: ${baseURL}`)
+    crawlPage(baseURL)
+
+
+
+}
+
+main()

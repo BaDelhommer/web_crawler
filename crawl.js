@@ -19,7 +19,6 @@ function getURLsFromHTML(html, baseURL) {
         let href = anchor.getAttribute('href')
   
         try {
-          // convert any relative URLs to absolute URLs
           href = new URL(href, baseURL).href
           urls.push(href)
         } catch(err) {
@@ -31,4 +30,26 @@ function getURLsFromHTML(html, baseURL) {
     return urls
   }
 
-export { normalizeURL, getURLsFromHTML };
+  async function crawlPage(currentURL) {
+    console.log(`crawling ${currentURL}`)
+    
+    let res
+    try {
+        res = await fetch(currentURL)
+    } catch(err) {
+        throw new Error(`Got network error: ${err.message}`)
+    }
+
+    if (res.status > 399) {
+        console.log(`Got http error: ${res.status} ${res.statusText}`)
+    }
+
+    const contentType = res.headers.get('content-type')
+    if (!contentType || !contentType.includes('text/html')) {
+        console.log(`Got non-HTML response: ${contentType}`)
+        return
+    }
+    console.log(await res.text())
+  }
+
+export { normalizeURL, getURLsFromHTML, crawlPage };
