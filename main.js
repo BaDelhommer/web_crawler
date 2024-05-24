@@ -1,7 +1,8 @@
-import { normalizeURL, crawlPage } from "./crawl.js";
+import { crawlPage } from "./crawl.js";
+import { printReport } from "./report.js"
 import process from "node:process";
 
-function main() {
+async function main() {
     if (process.argv.length > 3) {
         console.log("Too many arguments")
         return
@@ -14,10 +15,9 @@ function main() {
     const baseURL = process.argv[2]
 
     console.log(`starting crawl of: ${baseURL}`)
-    crawlPage(baseURL)
-
-
-
+    const pages = crawlPage(baseURL)
+    printReport(pages)
+    
 }
 
 main()
